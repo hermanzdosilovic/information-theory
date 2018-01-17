@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import math
-
+import collections
+from matplotlib import pyplot
 
 def read_symbols():
     lines = []
@@ -14,16 +15,6 @@ def read_symbols():
     return "".join(lines)
 
 
-def calculate_frequency(symbols):
-    frequency = {}
-    for x in symbols:
-        if x in frequency:
-            frequency[x] += 1
-        else:
-            frequency[x] = 1
-    return frequency
-
-
 def calculate_probability(frequency):
     total_freq = sum(frequency.values())
     return {s: frequency[s] / total_freq for s in frequency.keys()}
@@ -34,10 +25,12 @@ def calculate_entropy(probability):
 
 
 if __name__ == "__main__":
-    symbols = read_symbols()
-    frequency = calculate_frequency(symbols)
+    frequency = collections.Counter(read_symbols())
     probability = calculate_probability(frequency)
     entropy = calculate_entropy(probability)
     print(frequency)
     print(probability)
     print(entropy)
+    pyplot.plot(probability.keys(), probability.values(), "ro")
+    pyplot.ylim([0,1])
+    pyplot.savefig("distribution.png")
