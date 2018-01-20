@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import math
-import collections
+import sys
 from matplotlib import pyplot
+from collections import Counter
 
-def read_symbols():
+def read_symbols(group_size):
     lines = []
     while True:
         try:
@@ -12,7 +13,8 @@ def read_symbols():
         except EOFError:
             break
         lines.append(line)
-    return "".join(lines)
+    joined = "".join(lines)
+    return [joined[i:i + group_size] for i in range(0, len(joined), group_size)]
 
 
 def calculate_probability(frequency):
@@ -25,12 +27,18 @@ def calculate_entropy(probability):
 
 
 if __name__ == "__main__":
-    frequency = collections.Counter(read_symbols())
+    if len(sys.argv) == 1:
+        group_size = 1
+    else:
+        group_size = int(sys.argv[1])
+
+    frequency = Counter(read_symbols(group_size))
     probability = calculate_probability(frequency)
     entropy = calculate_entropy(probability)
     print(frequency)
     print(probability)
     print(entropy)
+
     pyplot.plot(probability.keys(), probability.values(), "ro")
-    pyplot.ylim([0,1])
+    pyplot.ylim([0, 1])
     pyplot.savefig("distribution.png")
