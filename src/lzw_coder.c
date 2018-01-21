@@ -17,12 +17,8 @@ int main(int args, char ** argv) {
     }
 
     int codeCounter = kInitialDictSize;
-
     char character;
-    scanf("%c", &character);
-
     struct Buffer * buffer = newBuffer();
-    appendToBuffer(buffer, character);
 
     while (scanf("%c", &character) == 1) {
         appendToBuffer(buffer, character);
@@ -38,6 +34,7 @@ int main(int args, char ** argv) {
             appendToBuffer(buffer, character);
         }
     }
+    printf("%d ", * (int *) queryTrie(trie, buffer->content, buffer->size));
 
     return 0;
 }
