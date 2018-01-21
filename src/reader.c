@@ -2,12 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-struct Buffer {
-    char * content;
-    size_t capacity;
-    size_t size;
-};
+#include <string.h>
 
 struct Buffer * newBuffer() {
     struct Buffer * const buffer = (struct Buffer *) calloc(1, sizeof(struct Buffer));
@@ -23,6 +18,18 @@ void appendToBuffer(struct Buffer * const buffer, char const character) {
         buffer->content = (char *) realloc(buffer->content, buffer->capacity * sizeof(char));
     }
     buffer->content[buffer->size++] = character;
+}
+
+void removeLastFromBuffer(struct Buffer * const buffer) {
+    if (buffer->size > 0) {
+        buffer->content[buffer->size - 1] = '\0';
+        buffer->size--;
+    }
+}
+
+void clearBuffer(struct Buffer * const buffer) {
+    memset(buffer->content, 0, sizeof(buffer->content));
+    buffer->size = 0;
 }
 
 char * readFile(char * const fileName) {
